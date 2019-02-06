@@ -30,5 +30,22 @@ func NewBook(url string) (*Book, error) {
 }
 
 func (b *Book) Genres() []string {
+	genres := make([]string, 0)
 
+	b.doc.Find(".left .bookPageGenreLink").Each(func(i int, sel *goquery.Selection) {
+		if g := sel.Text(); !exists(g, genres) {
+			genres = append(genres, g)
+		}
+	})
+
+	return genres
+}
+
+func exists(s string, ss []string) bool {
+	for _, s1 := range ss {
+		if s1 == s {
+			return true
+		}
+	}
+	return false
 }
