@@ -1,7 +1,7 @@
 package goodreads
 
 import (
-	"github.com/ketabchi/melli/api"
+	"github.com/ketabchi/goodreads/api"
 
 	"github.com/PuerkitoBio/goquery"
 )

@@ -1,5 +1,9 @@
 package api
 
-import "net/http"
+import (
+	"net/http"
+)
 
-var client *http.Client
+const key = "V6TnFk4YbLS0GdljcCGKQ"
+
+var client = &http.Client{}
