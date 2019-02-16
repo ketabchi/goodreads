@@ -2,10 +2,10 @@ package api
 
 import "testing"
 
-func TestGetBookURLByISBN(t *testing.T) {
+func TestGetBookByISBN(t *testing.T) {
 	tests := []struct {
-		isbn string
-		exp  string
+		isbn   string
+		expURL string
 	}{
 		{
 			"9780132350884",
@@ -14,13 +14,13 @@ func TestGetBookURLByISBN(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		url, err := GetBookURLByISBN(test.isbn)
+		url, err := GetBookByISBN(test.isbn)
 		if err != nil {
 			t.Errorf("Test %d: Error on getting book url by isbn: %s", i, err)
 			continue
 		}
-		if url != test.exp {
-			t.Errorf("Expected url %s, but got %s", test.exp, url)
+		if url != test.expURL {
+			t.Errorf("Expected url %s, but got %s", test.expURL, url)
 		}
 	}
 }

@@ -9,18 +9,27 @@ import (
 type Book struct {
 	url string
 	doc *goquery.Document
+	api.Book
 }
 
 func NewBookByISBN(isbn string) (*Book, error) {
-	url, err := api.GetBookURLByISBN(isbn)
+	gb, err := api.GetBookByISBN(isbn)
 	if err != nil {
 		return nil, err
 	}
 
-	return NewBook(url)
+	book, err := newBook(gb.URL)
+	if err != nil {
+		return nil, err
+	}
+	book.Book = gb
+
+	return book, nil
 }
 
-func NewBook(url string) (*Book, error) {
+// Not exporting this because when calling newBook directly book.Book doesn't
+// get filled
+func newBook(url string) (*Book, error) {
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
 		return nil, err
