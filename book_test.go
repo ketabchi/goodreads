@@ -2,6 +2,8 @@ package goodreads
 
 import (
 	"testing"
+
+	"github.com/ketabchi/util"
 )
 
 func TestGenres(t *testing.T) {
@@ -32,7 +34,7 @@ func TestGenres(t *testing.T) {
 			t.Errorf("Test %d: Error on creating book: %s", i, err)
 			continue
 		}
-		if genres := b.Genres(); !checkEq(genres, test.exp) {
+		if genres := b.Genres(); !util.CheckSliceEq(genres, test.exp) {
 			t.Errorf("Test %d: Expected genres %q, but got %q", i, test.exp, genres)
 		}
 	}
@@ -61,24 +63,4 @@ func TestBestBookID(t *testing.T) {
 				i, test.exp, book.Work.BestBookID)
 		}
 	}
-}
-
-func checkEq(ss1, ss2 []string) bool {
-	if len(ss1) != len(ss2) {
-		return false
-	}
-
-	for _, s1 := range ss1 {
-		found := false
-		for _, s2 := range ss2 {
-			if s1 == s2 {
-				found = true
-				break
-			}
-		}
-		if !found {
-			return false
-		}
-	}
-	return true
 }
