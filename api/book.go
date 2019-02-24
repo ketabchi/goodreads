@@ -15,7 +15,8 @@ type (
 	}
 
 	Work struct {
-		BestBookID string `xml:"work>best_book_id"`
+		BestBookID  string `xml:"work>best_book_id"`
+		RatingCount int    `xml:"work>ratings_count"`
 	}
 )
 
