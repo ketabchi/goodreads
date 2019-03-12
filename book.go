@@ -22,7 +22,7 @@ func NewBookByISBN(isbn string) (*Book, error) {
 	if err != nil {
 		return nil, err
 	}
-	book.Book = gb
+	book.Book = *gb
 
 	return book, nil
 }
