@@ -1,47 +1,55 @@
 package api
 
 import (
-	"encoding/xml"
 	"errors"
 	"fmt"
+	"net/url"
 )
 
 type (
 	Book struct {
-		ID    string `xml:"id"`
-		URL   string `xml:"url"`
-		Title string `xml:"title"`
-		ISBN  string `xml:"isbn13"`
-		Work
+		ID      string   `xml:"id"`
+		URL     string   `xml:"url"`
+		Title   string   `xml:"title"`
+		ISBN    string   `xml:"isbn13"`
+		Work    Work     `xml:"work"`
+		Authors []Author `xml:"authors>author"`
 	}
 
 	Work struct {
-		BestBookID  string `xml:"work>best_book_id"`
-		RatingCount int    `xml:"work>ratings_count"`
+		BestBookID  string `xml:"best_book_id"`
+		RatingCount int    `xml:"ratings_count"`
 	}
-)
 
-var (
-	BookNotFoundError = errors.New("book not found")
+	Author struct {
+		Name string `xml:"name"`
+		Role string `xml:"role"`
+	}
 )
 
 func GetBookByISBN(isbn string) (*Book, error) {
 	rawurl := fmt.Sprintf("https://www.goodreads.com/book/isbn/%s?key=%s", isbn, key)
-	resp, err := client.Get(rawurl)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
 
-	if resp.StatusCode == 404 {
-		return nil, BookNotFoundError
-	}
+	return getBook(rawurl)
+}
 
-	var grResp Response
-	err = xml.NewDecoder(resp.Body).Decode(&grResp)
-	if err != nil {
-		return nil, err
+func GetBookByTitle(args ...string) (*Book, error) {
+	if len(args) == 0 {
+		return nil, errors.New("get book by title requires at least title")
+	}
+	title := url.QueryEscape(args[0])
+	author := ""
+	if len(args) > 1 {
+		author = url.QueryEscape(args[1])
 	}
 
-	return &grResp.Book, nil
+	rawurl := fmt.Sprintf("https://www.goodreads.com/book/title.xml?title=%s&author=%s&key=%s", title, author, key)
+
+	return getBook(rawurl)
+}
+
+func GetBookByID(id string) (*Book, error) {
+	rawurl := fmt.Sprintf("https://www.goodreads.com/book/show/%s.xml?key=%s", id, key)
+
+	return getBook(rawurl)
 }

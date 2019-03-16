@@ -1,7 +1,11 @@
 package goodreads
 
 import (
+	"errors"
+	"regexp"
+
 	"github.com/ketabchi/goodreads/api"
+	"github.com/ketabchi/util"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -27,8 +31,41 @@ func NewBookByISBN(isbn string) (*Book, error) {
 	return book, nil
 }
 
-// Not exporting this because when calling newBook directly book.Book doesn't
-// get filled
+func NewBookByTitle(title string) (*Book, error) {
+	gb, err := api.GetBookByTitle(title)
+	if err != nil {
+		return nil, err
+	}
+
+	book, err := newBook(gb.URL)
+	if err != nil {
+		return nil, err
+	}
+	book.Book = *gb
+
+	return book, nil
+}
+
+func NewBook(url string) (*Book, error) {
+	id := bookID(url)
+	if len(id) == 0 {
+		return nil, errors.New("can't get book id from url")
+	}
+
+	gb, err := api.GetBookByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	book, err := newBook(gb.URL)
+	if err != nil {
+		return nil, err
+	}
+	book.Book = *gb
+
+	return book, nil
+}
+
 func newBook(url string) (*Book, error) {
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
@@ -38,11 +75,21 @@ func newBook(url string) (*Book, error) {
 	return &Book{url: url, doc: doc}, nil
 }
 
+var bookIDRe = regexp.MustCompile("goodreads\\.com\\/book\\/show\\/([0-9]+)")
+
+func bookID(url string) string {
+	ss := bookIDRe.FindStringSubmatch(url)
+	if len(ss) < 2 {
+		return ""
+	}
+	return ss[1]
+}
+
 func (b *Book) Genres() []string {
 	genres := make([]string, 0)
 
 	b.doc.Find(".left .bookPageGenreLink").Each(func(i int, sel *goquery.Selection) {
-		if g := sel.Text(); !exists(g, genres) {
+		if g := sel.Text(); !util.ExistsStringInSlice(g, genres) {
 			genres = append(genres, g)
 		}
 	})
@@ -50,9 +97,10 @@ func (b *Book) Genres() []string {
 	return genres
 }
 
-func exists(s string, ss []string) bool {
-	for _, s1 := range ss {
-		if s1 == s {
+func (b *Book) HasAuthor(name string) bool {
+	authors := b.Authors
+	for _, author := range authors {
+		if author.Name == name {
 			return true
 		}
 	}
