@@ -67,7 +67,7 @@ func NewBook(url string) (*Book, error) {
 }
 
 func newBook(url string) (*Book, error) {
-	doc, err := goquery.NewDocument(url)
+	doc, err := api.GetDoc(url)
 	if err != nil {
 		return nil, err
 	}
