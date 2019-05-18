@@ -52,7 +52,7 @@ func getBook(rawurl string) (*Book, error) {
 	return &grResp.Book, nil
 }
 
-func init() {
+func addProxy() {
 	auth := &proxy.Auth{username, password}
 	dial, err := proxy.SOCKS5("tcp", proxy_addr, auth, proxy.Direct)
 	if err != nil {
@@ -63,5 +63,11 @@ func init() {
 	httpTransport.Dial = dial.Dial
 
 	client.Transport = httpTransport
+}
+
+func init() {
 	client.Timeout = time.Duration(20 * time.Second)
+	if proxy_addr != "" {
+		addProxy()
+	}
 }
