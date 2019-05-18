@@ -2,7 +2,7 @@ package api
 
 import "os"
 
-const (
+var (
 	proxy_addr = "ad.socadd.com:443"
 	username   = "ir435166"
 	password   = "529233"
