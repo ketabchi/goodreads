@@ -3,9 +3,9 @@ package api
 import "os"
 
 var (
-	proxy_addr = "ad.socadd.com:443"
-	username   = "ir435166"
-	password   = "529233"
+	proxy_addr = ""
+	username   = ""
+	password   = ""
 )
 
 func init() {
