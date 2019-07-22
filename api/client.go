@@ -14,7 +14,7 @@ import (
 const key = "V6TnFk4YbLS0GdljcCGKQ"
 
 var (
-	client = &http.Client{Timeout: time.Second * 10}
+	client = &http.Client{Timeout: time.Second * 20}
 
 	NotFoundError      = errors.New("book not found")
 	FailedRequestError = errors.New("request failed")
