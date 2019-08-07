@@ -89,7 +89,7 @@ func (b *Book) Genres() []string {
 	genres := make([]string, 0)
 
 	b.doc.Find(".left .bookPageGenreLink").Each(func(i int, sel *goquery.Selection) {
-		if g := sel.Text(); !util.ExistsStringInSlice(g, genres) {
+		if g := sel.Text(); !util.SliceContains(genres, g) {
 			genres = append(genres, g)
 		}
 	})
