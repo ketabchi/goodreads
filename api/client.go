@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -12,7 +11,7 @@ import (
 const key = "V6TnFk4YbLS0GdljcCGKQ"
 
 var (
-	client = &http.Client{Timeout: time.Second * 20}
+	client = &http.Client{}
 
 	NotFoundError      = errors.New("book not found")
 	FailedRequestError = errors.New("request failed")
@@ -48,4 +47,8 @@ func getBook(rawurl string) (*Book, error) {
 	}
 
 	return &grResp.Book, nil
+}
+
+func SetClient(c *http.Client) {
+	client = c
 }
