@@ -106,3 +106,7 @@ func (b *Book) HasAuthor(name string) bool {
 	}
 	return false
 }
+
+func (b *Book) Link() string {
+	return b.url
+}
