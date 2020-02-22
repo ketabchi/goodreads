@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/PuerkitoBio/goquery"
@@ -35,9 +36,9 @@ func getBook(rawurl string) (*Book, error) {
 
 	if resp.StatusCode != 200 {
 		if resp.StatusCode == 404 {
-			return nil, NotFoundError
+			return nil, fmt.Errorf("%s resulted in %w", rawurl, NotFoundError)
 		}
-		return nil, FailedRequestError
+		return nil, fmt.Errorf("%s resulted in %w", rawurl, FailedRequestError)
 	}
 
 	var grResp Response
