@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"testing"
 )
 
@@ -28,9 +29,7 @@ func TestGetBookByISBN(t *testing.T) {
 }
 
 func TestGetBookByISBNError(t *testing.T) {
-	isbn := "9789643416100"
-	_, err := GetBookByISBN(isbn)
-	if err != NotFoundError {
+	if _, err := GetBookByISBN("9789643416100"); !errors.Is(err, NotFoundError) {
 		t.Errorf("Expected book not found error but got: %s", err)
 	}
 }

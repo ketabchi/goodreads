@@ -43,7 +43,8 @@ func GetBookByTitle(args ...string) (*Book, error) {
 		author = url.QueryEscape(args[1])
 	}
 
-	rawurl := fmt.Sprintf("https://www.goodreads.com/book/title.xml?title=%s&author=%s&key=%s", title, author, key)
+	rawurl := fmt.Sprintf("https://www.goodreads.com/book/title.xml?title=%s&author=%s&key=%s",
+		title, author, key)
 
 	return getBook(rawurl)
 }
