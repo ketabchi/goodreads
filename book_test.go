@@ -116,3 +116,31 @@ func TestHasAuthor(t *testing.T) {
 		}
 	}
 }
+
+func TestSerie(t *testing.T) {
+	tests := []struct {
+		url string
+		exp string
+	}{
+		{
+			"https://www.goodreads.com/book/show/17347634-me-before-you",
+			"Me Before You",
+		},
+		{
+			"https://www.goodreads.com/book/show/2195738._04_",
+			"Tintin",
+		},
+	}
+
+	for i, test := range tests {
+		book, err := NewBook(test.url)
+		if err != nil {
+			t.Errorf("Test %d: Couldnt create book from %s: %s", i, test.url, err)
+			continue
+		}
+
+		if serie := book.Serie(); serie != test.exp {
+			t.Errorf("Test %d: Expected serie %s, but got %s", i, test.exp, serie)
+		}
+	}
+}

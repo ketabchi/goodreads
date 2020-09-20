@@ -3,6 +3,7 @@ package goodreads
 import (
 	"errors"
 	"regexp"
+	"strings"
 
 	"github.com/ketabchi/goodreads/api"
 	"github.com/ketabchi/util"
@@ -109,4 +110,12 @@ func (b *Book) HasAuthor(name string) bool {
 
 func (b *Book) Link() string {
 	return b.url
+}
+
+var serieNumRe = regexp.MustCompile(" #([0-9]+)$")
+
+func (b *Book) Serie() string {
+	s := b.doc.Find("#bookSeries a").Text()
+	s = strings.Trim(s, "()\n ")
+	return serieNumRe.ReplaceAllString(s, "")
 }
