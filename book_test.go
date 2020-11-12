@@ -130,6 +130,10 @@ func TestSerie(t *testing.T) {
 			"https://www.goodreads.com/book/show/2195738._04_",
 			"Tintin",
 		},
+		{
+			"https://www.goodreads.com/book/show/26272491-reason-and-responsibility",
+			"",
+		},
 	}
 
 	for i, test := range tests {
