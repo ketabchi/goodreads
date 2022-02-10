@@ -12,14 +12,12 @@ import (
 const key = "V6TnFk4YbLS0GdljcCGKQ"
 
 var (
-	Client = &http.Client{}
-
 	NotFoundError      = errors.New("book not found")
 	FailedRequestError = errors.New("request failed")
 )
 
 func GetDoc(rawurl string) (*goquery.Document, error) {
-	res, err := Client.Get(rawurl)
+	res, err := http.Get(rawurl)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +26,7 @@ func GetDoc(rawurl string) (*goquery.Document, error) {
 }
 
 func getBook(rawurl string) (*Book, error) {
-	resp, err := Client.Get(rawurl)
+	resp, err := http.Get(rawurl)
 	if err != nil {
 		return nil, err
 	}
