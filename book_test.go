@@ -13,12 +13,11 @@ func TestGenres(t *testing.T) {
 	}{
 		{
 			"https://www.goodreads.com/book/show/7683075",
-			[]string{"Philosophy", "Nonfiction", "Unfinished",
-				"Psychology", "Classics"},
+			[]string{"Philosophy", "Nonfiction"},
 		},
 		{
 			"https://www.goodreads.com/book/show/178493._",
-			[]string{"Novels", "Fiction"},
+			[]string{},
 		},
 		{
 			"https://www.goodreads.com/book/show/10541690",

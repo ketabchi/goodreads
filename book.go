@@ -3,6 +3,7 @@ package goodreads
 import (
 	"errors"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/ketabchi/goodreads/api"
@@ -76,7 +77,7 @@ func newBook(url string) (*Book, error) {
 	return &Book{url: url, doc: doc}, nil
 }
 
-var bookIDRe = regexp.MustCompile("goodreads\\.com\\/book\\/show\\/([0-9]+)")
+var bookIDRe = regexp.MustCompile(`goodreads\.com\/book\/show\/([0-9]+)`)
 
 func bookID(url string) string {
 	ss := bookIDRe.FindStringSubmatch(url)
@@ -90,7 +91,19 @@ func (b *Book) Genres() []string {
 	genres := make([]string, 0)
 
 	b.doc.Find(".left .bookPageGenreLink").Each(func(i int, sel *goquery.Selection) {
-		if g := sel.Text(); !util.SliceContains(genres, g) {
+		g := sel.Text()
+		if util.SliceContains(genres, g) {
+			return
+		}
+
+		s := sel.ParentsUntil(".elementList").Parent().Find(".right .bookPageGenreLink").Text()
+		s = strings.Trim(s, "\n ")
+		s = strings.ReplaceAll(s, " users", "")
+		s = strings.ReplaceAll(s, ",", "")
+
+		count, _ := strconv.Atoi(s)
+
+		if count > 80 {
 			genres = append(genres, g)
 		}
 	})
